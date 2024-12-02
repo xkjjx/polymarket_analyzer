@@ -4,7 +4,7 @@ from dotenv import dotenv_values
 config = dotenv_values(".env")
 
 endpoint: str = "https://clob.polymarket.com/"
-creds = ApiCreds(config["API_KEY"], config["API_SECRET"], config["API_PASSPHRASE"])
+creds = ApiCreds(config["POLYMARKET_API_KEY"], config["POLYMARKET_API_SECRET"], config["POLYMARKET_API_PASSPHRASE"])
 key: str = config["POLYMARKET_PRIVATE_KEY"]
 chain_id: int = 137
 
@@ -15,8 +15,13 @@ marketsData = client.get_markets(next_cursor="")
 markets = marketsData["data"]
 
 questions = []
+outcomes = []
+rewards = []
 
 for market in markets:
     questions.append(market["question"])
+    outcomes.append(market["tokens"])
+    rewards.append(market["rewards"])
 
-print(questions)
+for question, outcome in zip(questions, outcomes):
+    print(question, len(outcome), len(rewards))
